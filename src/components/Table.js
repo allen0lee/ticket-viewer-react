@@ -6,8 +6,7 @@ class Table extends React.Component {
     super()
     this.state = {
       ticketsInfo: [
-        {"Ticket id": null, "Status": null, "Subject": null, "Requested": null},
-        {"Ticket id": 1, "Status": 1, "Subject": 1, "Requested": 1}
+        {id: null, status: null, subject: null, requested: null}
       ]
     }
   }
@@ -51,13 +50,13 @@ class Table extends React.Component {
 
   renderTableData() {
     return this.state.ticketsInfo.map((ticket, index) => {
-      const {"Ticket id":TicketId, Status, Subject, Requested} = ticket //destructuring
+      const {id, status, subject, requested} = ticket //destructuring
       return (
-        <tr key={index}>
-          <td>{TicketId}</td>
-          <td>{Status}</td>
-          <td>{Subject}</td>
-          <td>{Requested}</td>
+        <tr key={id}>
+          <td>{id}</td>
+          <td>{status}</td>
+          <td>{subject}</td>
+          <td>{requested}</td>
         </tr>
       )
     })
