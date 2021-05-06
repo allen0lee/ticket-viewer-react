@@ -5,32 +5,58 @@ class Table extends React.Component {
   constructor() {
     super()
     this.state = {
-      tickets: [
-        {"Status": 1, "Subject": 1, "Requester": 1, "Requested": 1}
-      ],
-      pages: []
+      ticketsInfo: [
+        {"Ticket id": null, "Status": null, "Subject": null, "Requested": null},
+        {"Ticket id": 1, "Status": 1, "Subject": 1, "Requested": 1}
+      ]
     }
   }
 
-  componentDidMount() {
-  
+  async componentDidMount() {
+    try {
+      await fetch("http://localhost:9292").then(res => res.json()).then(res => {
+        console.log(res.tickets[21]) // api json 
+        res.tickets.forEach(ticket => {
+          this.setState({ticketsInfo: [...this.state.ticketsInfo, ticket]}) 
+        })
+      })
+      this.setState({ticketsInfo: this.state.ticketsInfo.slice(1)}) // remove first empty line in table, shift() will mutate
+      console.log(this.state.ticketsInfo.length)
+      console.log(this.state.ticketsInfo[3])
+
+    } catch (ex) {
+      // to error page
+    }
+
+    // const fetchTickets = async () => {      
+    //   await fetch("http://localhost:9292").then(res => res.json()).then(res => {
+    //     console.log(res.tickets[21]) // api json 
+    //     res.tickets.forEach(ticket => {
+    //       this.setState({ticketsInfo: [...this.state.ticketsInfo, ticket]}) 
+    //     })
+    //   })
+    //   this.setState({ticketsInfo: this.state.ticketsInfo.slice(1)}) // remove first empty line in table, shift() will mutate
+    //   console.log(this.state.ticketsInfo.length)
+    //   console.log(this.state.ticketsInfo[3])
+    // } 
+    // fetchTickets()    
   }
 
   renderTableHeader() {
-    let header = Object.keys(this.state.tickets[0])
+    let header = Object.keys(this.state.ticketsInfo[0])
     return header.map((key, index) => {
       return <th key={index}>{key}</th>
     })
   }
 
   renderTableData() {
-    return this.state.tickets.map((ticket, index) => {
-      const {Status, Subject, Requester, Requested} = ticket //destructuring
+    return this.state.ticketsInfo.map((ticket, index) => {
+      const {"Ticket id":TicketId, Status, Subject, Requested} = ticket //destructuring
       return (
-        <tr key={ticket}>
+        <tr key={index}>
+          <td>{TicketId}</td>
           <td>{Status}</td>
           <td>{Subject}</td>
-          <td>{Requester}</td>
           <td>{Requested}</td>
         </tr>
       )
@@ -40,7 +66,7 @@ class Table extends React.Component {
   render() {
     return (
       <div>
-          <table class="tickets-list">
+          <table className= "tickets-list">
             <tbody>
               <tr>{this.renderTableHeader()}</tr>
               {this.renderTableData()}
