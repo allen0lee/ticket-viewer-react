@@ -5,23 +5,26 @@ class Table extends React.Component {
   constructor() {
     super()
     this.state = {
+      unsolvedTickets: 0,
       ticketsInfo: [
-        {id: null, status: null, subject: null, requested: null}
-      ]
+        {status: null, subject: null, requested: null}
+      ],
+      pageNumbers: []
     }
   }
 
   async componentDidMount() {
     try {
       await fetch("http://localhost:9292").then(res => res.json()).then(res => {
-        console.log(res.tickets[21]) // api json 
         res.tickets.forEach(ticket => {
           this.setState({ticketsInfo: [...this.state.ticketsInfo, ticket]}) 
         })
+
+        for(let i = 1; i <= res.pages; i++) {
+          this.setState({pageNumbers: [...this.state.pageNumbers, i]})
+        }
       })
       this.setState({ticketsInfo: this.state.ticketsInfo.slice(1)}) // remove first empty line in table, shift() will mutate
-      console.log(this.state.ticketsInfo.length)
-      console.log(this.state.ticketsInfo[3])
 
     } catch (ex) {
       // to error page
@@ -50,14 +53,21 @@ class Table extends React.Component {
 
   renderTableData() {
     return this.state.ticketsInfo.map((ticket, index) => {
-      const {id, status, subject, requested} = ticket //destructuring
+      const {status, subject, requested} = ticket //destructuring
       return (
-        <tr key={id}>
-          <td>{id}</td>
+        <tr key={index}>
           <td>{status}</td>
           <td>{subject}</td>
           <td>{requested}</td>
         </tr>
+      )
+    })
+  }
+
+  renderPageNumbers() {
+    return this.state.pageNumbers.map((page, index) => {
+      return (
+        <a key={index}>{page}</a>
       )
     })
   }
@@ -71,6 +81,7 @@ class Table extends React.Component {
               {this.renderTableData()}
             </tbody>
           </table>
+          {this.renderPageNumbers()}
       </div>
     )
   }
