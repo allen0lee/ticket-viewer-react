@@ -28,20 +28,25 @@ class Table extends React.Component {
 
     } catch (ex) {
       // to error page
-    }
+    }   
+  }
 
-    // const fetchTickets = async () => {      
-    //   await fetch("http://localhost:9292").then(res => res.json()).then(res => {
-    //     console.log(res.tickets[21]) // api json 
-    //     res.tickets.forEach(ticket => {
-    //       this.setState({ticketsInfo: [...this.state.ticketsInfo, ticket]}) 
-    //     })
-    //   })
-    //   this.setState({ticketsInfo: this.state.ticketsInfo.slice(1)}) // remove first empty line in table, shift() will mutate
-    //   console.log(this.state.ticketsInfo.length)
-    //   console.log(this.state.ticketsInfo[3])
-    // } 
-    // fetchTickets()    
+  async switchTablePage(pageNumber) {
+    try {
+      await fetch(`http://localhost:9292/list/pages/${pageNumber}`).then(res => res.json()).then(res => {
+        res.tickets.forEach(ticket => {
+          this.setState({ticketsInfo: [...this.state.ticketsInfo, ticket]}) 
+        })
+
+        for(let i = 1; i <= res.pages; i++) {
+          this.setState({pageNumbers: [...this.state.pageNumbers, i]})
+        } 
+      })
+      this.setState({ticketsInfo: this.state.ticketsInfo.slice(1)}) // remove first empty line in table, shift() will mutate
+
+    } catch (ex) {
+      // to error page
+    }
   }
 
   renderTableHeader() {
@@ -66,8 +71,9 @@ class Table extends React.Component {
 
   renderPageNumbers() {
     return this.state.pageNumbers.map((page, index) => {
+      let url = `http://localhost:9292/list/pages/${page}`
       return (
-        <a key={index}>{page}</a>
+        <a key={index} onClick={this.switchTablePage(page)}>{page}</a>
       )
     })
   }
