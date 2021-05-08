@@ -56,6 +56,10 @@ class Table extends React.Component {
     }
   }
 
+  toDetailsPage() {
+    
+  }
+
   renderTableHeader() {
     let header = Object.keys(this.state.ticketsInfo[0])
     return header.map((key, index) => {
@@ -70,7 +74,7 @@ class Table extends React.Component {
         <tr key={index}>
           <td>{id}</td>
           <td>{status}</td>
-          <td>{subject}</td>
+          <td><a href="">{subject}</a></td>
           <td>{requested}</td>
         </tr>
       )
@@ -79,7 +83,6 @@ class Table extends React.Component {
 
   renderPageNumbers() {
     return this.state.pageNumbers.map((page, index) => {
-      let url = `http://localhost:9292/list/pages/${page}`
       return (
         <a key={index} onClick={() => this.switchTablePage(page)}>{page}</a>
       )
