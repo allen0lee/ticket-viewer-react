@@ -1,16 +1,22 @@
 import React from 'react'
 // import './Table.css'
 
+const initialState = {
+  unsolvedTickets: 0,
+  ticketsInfo: [
+    {id: null, status: null, subject: null, requested: null}
+  ],
+  pageNumbers: []    
+}
+
 class Table extends React.Component {
   constructor() {
     super()
-    this.state = {
-      unsolvedTickets: 0,
-      ticketsInfo: [
-        {status: null, subject: null, requested: null}
-      ],
-      pageNumbers: []
-    }
+    this.state = initialState
+  }
+
+  resetState() {
+    this.setState(initialState)
   }
 
   async componentDidMount() {
@@ -32,6 +38,7 @@ class Table extends React.Component {
   }
 
   async switchTablePage(pageNumber) {
+    this.resetState()
     try {
       await fetch(`http://localhost:9292/list/pages/${pageNumber}`).then(res => res.json()).then(res => {
         res.tickets.forEach(ticket => {
@@ -58,9 +65,10 @@ class Table extends React.Component {
 
   renderTableData() {
     return this.state.ticketsInfo.map((ticket, index) => {
-      const {status, subject, requested} = ticket //destructuring
+      const {id, status, subject, requested} = ticket //destructuring
       return (
         <tr key={index}>
+          <td>{id}</td>
           <td>{status}</td>
           <td>{subject}</td>
           <td>{requested}</td>
@@ -73,7 +81,7 @@ class Table extends React.Component {
     return this.state.pageNumbers.map((page, index) => {
       let url = `http://localhost:9292/list/pages/${page}`
       return (
-        <a key={index} onClick={this.switchTablePage(page)}>{page}</a>
+        <a key={index} onClick={() => this.switchTablePage(page)}>{page}</a>
       )
     })
   }
