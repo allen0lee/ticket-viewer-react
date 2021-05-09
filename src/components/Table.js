@@ -1,12 +1,13 @@
 import React from 'react'
+import { Link, withRouter } from 'react-router-dom';
 // import './Table.css'
 
 const initialState = {
   unsolvedTickets: 0,
   ticketsInfo: [
-    {id: null, status: null, subject: null, requested: null}
+    { id: null, status: null, subject: null, requested: null }
   ],
-  pageNumbers: []    
+  pageNumbers: []
 }
 
 class Table extends React.Component {
@@ -20,21 +21,20 @@ class Table extends React.Component {
   }
 
   async componentDidMount() {
-    try {
-      await fetch("http://localhost:9292").then(res => res.json()).then(res => {
-        res.tickets.forEach(ticket => {
-          this.setState({ticketsInfo: [...this.state.ticketsInfo, ticket]}) 
-        })
+    const { match, history } = this.props;
 
-        for(let i = 1; i <= res.pages; i++) {
-          this.setState({pageNumbers: [...this.state.pageNumbers, i]})
-        }
+    await fetch("http://localhost:9292").then(res => res.json()).then(res => {
+      res.tickets.forEach(ticket => {
+        this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
       })
-      this.setState({ticketsInfo: this.state.ticketsInfo.slice(1)}) // remove first empty line in table, shift() will mutate
 
-    } catch (ex) {
-      // to error page
-    }   
+      for (let i = 1; i <= res.pages; i++) {
+        this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
+      }
+    }).catch((e) => history.push('/error'))
+
+    this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) }) // remove first empty line in table, shift() will mutate
+
   }
 
   async switchTablePage(pageNumber) {
@@ -42,14 +42,14 @@ class Table extends React.Component {
     try {
       await fetch(`http://localhost:9292/list/pages/${pageNumber}`).then(res => res.json()).then(res => {
         res.tickets.forEach(ticket => {
-          this.setState({ticketsInfo: [...this.state.ticketsInfo, ticket]}) 
+          this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
         })
 
-        for(let i = 1; i <= res.pages; i++) {
-          this.setState({pageNumbers: [...this.state.pageNumbers, i]})
-        } 
+        for (let i = 1; i <= res.pages; i++) {
+          this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
+        }
       })
-      this.setState({ticketsInfo: this.state.ticketsInfo.slice(1)}) // remove first empty line in table, shift() will mutate
+      this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) }) // remove first empty line in table, shift() will mutate
 
     } catch (ex) {
       // to error page
@@ -57,7 +57,7 @@ class Table extends React.Component {
   }
 
   toDetailsPage() {
-    
+
   }
 
   renderTableHeader() {
@@ -69,12 +69,14 @@ class Table extends React.Component {
 
   renderTableData() {
     return this.state.ticketsInfo.map((ticket, index) => {
-      const {id, status, subject, requested} = ticket //destructuring
+      const { id, status, subject, requested } = ticket //destructuring
       return (
         <tr key={index}>
           <td>{id}</td>
           <td>{status}</td>
-          <td><a href="">{subject}</a></td>
+          <td>
+            <Link to={`/tickets/${id}`}>{subject}</Link>
+          </td>
           <td>{requested}</td>
         </tr>
       )
@@ -92,16 +94,16 @@ class Table extends React.Component {
   render() {
     return (
       <div>
-          <table className= "tickets-list">
-            <tbody>
-              <tr>{this.renderTableHeader()}</tr>
-              {this.renderTableData()}
-            </tbody>
-          </table>
-          {this.renderPageNumbers()}
+        <table className="tickets-list">
+          <tbody>
+            <tr>{this.renderTableHeader()}</tr>
+            {this.renderTableData()}
+          </tbody>
+        </table>
+        {this.renderPageNumbers()}
       </div>
     )
   }
 }
 
-export default Table;
+export default withRouter(Table);
