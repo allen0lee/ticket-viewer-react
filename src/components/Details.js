@@ -31,6 +31,7 @@ class Details extends React.Component {
         <p>{requester}</p>
         <p>{moment(requested).format('YYYY-MM-DD HH:MM:SS')}</p>
         <p>{description}</p>
+        <Link to="/tickets">Return to Tickets</Link>
       </div>
     )
   }
