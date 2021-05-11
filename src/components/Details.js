@@ -28,13 +28,13 @@ class Details extends React.Component {
       }
       return <div>Loading...</div>
     }
-    
+
     const { subject, status, requester, requested, description } = this.state.ticket
     return (
       <div>
         <h3>Subject: {subject}</h3>
         <p>Requester: {requester}</p>
-        <p>{moment(requested).format('YYYY-MM-DD HH:MM:SS')}</p>
+        <p>{moment(requested).format('YYYY-MM-DD HH:MM')}</p>
         <p>Description: {description}</p>
         <Link to="/tickets">Back to All Tickets</Link>
       </div>

@@ -85,7 +85,7 @@ class Table extends React.Component {
           <td>
             <Link to={`/ticket/${id}`}>{subject}</Link>
           </td>
-          <td>{moment(requested).format('YYYY-MM-DD HH:MM:SS')}</td>
+          <td>{moment(requested).format('YYYY-MM-DD HH:MM')}</td>
         </tr>
       )
     })
