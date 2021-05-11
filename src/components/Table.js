@@ -71,7 +71,7 @@ class Table extends React.Component {
   renderTableHeader() {
     let header = Object.keys(this.state.ticketsInfo[0])
     return header.map((key, index) => {
-      return <th key={index}>{key}</th>
+      return <th key={index}>{key[0].toUpperCase() + key.substring(1)}</th>
     })
   }
 
