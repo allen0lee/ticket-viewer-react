@@ -1,13 +1,15 @@
 import React from 'react'
-import { Link, withRouter } from 'react-router-dom';
+import moment from 'moment'
+import { Link, withRouter } from 'react-router-dom'
 // import './Table.css'
 
 const initialState = {
-  unsolvedTickets: 0,
+  numOfTickets: 0,
   ticketsInfo: [
     { id: null, status: null, subject: null, requested: null }
   ],
-  pageNumbers: []
+  pageNumbers: [],
+  errorMessage: null
 }
 
 class Table extends React.Component {
@@ -21,43 +23,49 @@ class Table extends React.Component {
   }
 
   async componentDidMount() {
-    const { match, history } = this.props;
+    const { history } = this.props
 
     await fetch("http://localhost:9292").then(res => res.json()).then(res => {
-      res.tickets.forEach(ticket => {
-        this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
-      })
-
-      for (let i = 1; i <= res.pages; i++) {
-        this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
+      if (!("error" in res)) {
+        this.setState({ numOfTickets: res.count })
+        res.tickets.forEach(ticket => {
+          this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
+        })
+        for (let i = 1; i <= res.pages; i++) {
+          this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
+        }
+      } else {
+        this.setState({ errorMessage: res.error })
       }
-    }).catch((e) => history.push('/error'))
-
-    this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) }) // remove first empty line in table, shift() will mutate
-
+    }).catch(err => {
+      // when req is blocked or network error
+      history.push('/error')
+    })
+    // remove first empty line in table, shift() will mutate
+    this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) })
   }
 
   async switchTablePage(pageNumber) {
     this.resetState()
-    try {
-      await fetch(`http://localhost:9292/list/pages/${pageNumber}`).then(res => res.json()).then(res => {
+    const { history } = this.props
+
+    await fetch(`http://localhost:9292/list/pages/${pageNumber}`).then(res => res.json()).then(res => {
+      if (!("error" in res)) {
+        this.setState({ numOfTickets: res.count })
         res.tickets.forEach(ticket => {
           this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
         })
-
         for (let i = 1; i <= res.pages; i++) {
           this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
         }
-      })
-      this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) }) // remove first empty line in table, shift() will mutate
+      } else {
+        this.setState({ errorMessage: res.error })
+      }
+    }).catch(err => {
+      history.push('/error')
+    })
 
-    } catch (ex) {
-      // to error page
-    }
-  }
-
-  toDetailsPage() {
-
+    this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) })
   }
 
   renderTableHeader() {
@@ -75,9 +83,9 @@ class Table extends React.Component {
           <td>{id}</td>
           <td>{status}</td>
           <td>
-            <Link to={`/tickets/${id}`}>{subject}</Link>
+            <Link to={`/ticket/${id}`}>{subject}</Link>
           </td>
-          <td>{requested}</td>
+          <td>{moment(requested).format('YYYY-MM-DD HH:MM:SS')}</td>
         </tr>
       )
     })
@@ -92,8 +100,17 @@ class Table extends React.Component {
   }
 
   render() {
+    if (this.state.pageNumbers.length === 0) {
+      if (this.state.errorMessage !== null) {
+        return <div>{this.state.errorMessage}</div>
+      }
+      return <div>Loading...</div>
+    }
+
     return (
       <div>
+        <h3>Your unsolved tickets</h3>
+        <p>{this.state.numOfTickets} tickets</p>
         <table className="tickets-list">
           <tbody>
             <tr>{this.renderTableHeader()}</tr>

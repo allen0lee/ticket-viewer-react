@@ -1,3 +1,3 @@
-const Error = () => <div>Error</div>;
+const Error = () => <div>Oops, something goes wrong!</div>
 
-export default Error;
+export default Error

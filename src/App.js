@@ -6,7 +6,7 @@ import {
   Switch,
   Route,
   Redirect,
-} from "react-router-dom";
+} from "react-router-dom"
 // import './App.css';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
           <Route exact path="/tickets">
             <Table />
           </Route>
-          <Route path="/tickets/:id">
+          <Route path="/ticket/:id">
             <Details />
           </Route>
           <Route path="/error">
@@ -27,10 +27,9 @@ function App() {
             <Redirect to="/tickets" />
           </Route>
         </Switch>
-
       </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
