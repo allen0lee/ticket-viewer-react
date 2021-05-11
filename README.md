@@ -15,4 +15,7 @@ After finish configuring the backend, to turn on the server, in the backend repo
 
 3. See the result<br /> 
 In this repo directory window, run the solution by typing: `npm start`<br />
-This should pop out your web browser, and you can view the solution (Or you can type in web browser: `localhost:3000`). 
+This should pop out your web browser, and you can view the solution (Or you can type in web browser: `localhost:3000`).<br />
+You will see the 1st page of a list of tickets.<br />
+You can navigate between pages by clicking the page numbers at the bottom.<br />
+You can see the details of each ticket by clicking their subjects.
