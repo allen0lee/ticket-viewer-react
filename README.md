@@ -19,3 +19,10 @@ This should pop out your web browser, and you can view the solution (Or you can 
 You will see the 1st page of a list of tickets.<br />
 You can navigate between pages by clicking the page numbers at the bottom.<br />
 You can see the details of each ticket by clicking their subjects.
+
+4. Run the test<br />
+This solution provides test on:
+* Whether response of valid tickets is coming back from my Ruby Sinatra backend
+* Whether response of single ticket details is coming back from my Ruby Sinatra backend
+<br /><br />
+To run the test, navigate to the `test` folder inside `src`, run the test file by typing: `npm test`

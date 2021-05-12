@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import { Link, withRouter } from 'react-router-dom'
+import makeReqToApi from '../lib/makeReqToApi.js'
 // import './Table.css'
 
 const initialState = {
@@ -24,48 +25,53 @@ class Table extends React.Component {
 
   async componentDidMount() {
     const { history } = this.props
+    const url = "http://localhost:9292"
 
-    await fetch("http://localhost:9292").then(res => res.json()).then(res => {
+    try {
+      const res = await makeReqToApi(url)
       if (!("error" in res)) {
         this.setState({ numOfTickets: res.count })
         res.tickets.forEach(ticket => {
           this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
         })
+        // remove first empty line in table, shift() will mutate
+        this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) })
+
         for (let i = 1; i <= res.pages; i++) {
           this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
         }
       } else {
         this.setState({ errorMessage: res.error })
       }
-    }).catch(err => {
-      // when req is blocked or network error
-      history.push('/error')
-    })
-    // remove first empty line in table, shift() will mutate
-    this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) })
+    } catch (err) {
+      history.push('/error') // when req is blocked or network error
+    }
   }
 
   async switchTablePage(pageNumber) {
     this.resetState()
     const { history } = this.props
+    const url = `http://localhost:9292/tickets_list/page/${pageNumber}`
 
-    await fetch(`http://localhost:9292/list/pages/${pageNumber}`).then(res => res.json()).then(res => {
+    try {
+      const res = await makeReqToApi(url)
       if (!("error" in res)) {
         this.setState({ numOfTickets: res.count })
         res.tickets.forEach(ticket => {
           this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
         })
+
+        this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) })
+
         for (let i = 1; i <= res.pages; i++) {
           this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
         }
       } else {
         this.setState({ errorMessage: res.error })
       }
-    }).catch(err => {
+    } catch (err) {
       history.push('/error')
-    })
-
-    this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) })
+    }
   }
 
   renderTableHeader() {
@@ -94,7 +100,7 @@ class Table extends React.Component {
   renderPageNumbers() {
     return this.state.pageNumbers.map((page, index) => {
       return (
-        <a key={index} onClick={() => this.switchTablePage(page)}>{page}</a>
+        <a className="page-number" key={index} onClick={() => this.switchTablePage(page)}>{page} </a>
       )
     })
   }

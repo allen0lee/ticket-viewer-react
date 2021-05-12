@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import { Link, withRouter } from 'react-router-dom'
+import makeReqToApi from '../lib/makeReqToApi.js'
 
 class Details extends React.Component {
   constructor() {
@@ -8,17 +9,21 @@ class Details extends React.Component {
     this.state = {}
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { match, history } = this.props
     const ticketId = match.params.id
+    const url = `http://localhost:9292/ticket/${ticketId}`
 
-    fetch(`http://localhost:9292/list/${ticketId}`).then(res => res.json()).then(res => {
+    try {
+      const res = await makeReqToApi(url)
       if (!("error" in res)) {
         this.setState({ ticket: res.ticket })
       } else {
         this.setState({ errorMessage: res.error })
       }
-    }).catch(err => history.push('/error'))
+    } catch (err) {
+      history.push('/error') // when req is blocked or network error
+    }
   }
 
   render() {
@@ -29,7 +34,7 @@ class Details extends React.Component {
       return <div>Loading...</div>
     }
 
-    const { subject, status, requester, requested, description } = this.state.ticket
+    const { subject, requester, requested, description } = this.state.ticket
     return (
       <div>
         <h3>Subject: {subject}</h3>
