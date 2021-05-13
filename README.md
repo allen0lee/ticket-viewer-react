@@ -10,7 +10,7 @@ Clone this solution repo to your machine, inside the repo directory, type the fo
 This will install the dependencies required to run the frontend.
 
 2. Turn on the backend<br />
-First you need to have the backend ready (the link for the backend repo is in "Solution summary" and check the `readme` for how to prepare the backend).<br />
+First you need to have the backend ready (the link for the backend repo is [here](https://github.com/allen0lee/ticket_viewer), and check the `readme` for how to prepare the backend).<br />
 After finish configuring the backend, to turn on the server, in the backend repo directory window, type: `rackup config.ru`
 
 3. See the result<br /> 
