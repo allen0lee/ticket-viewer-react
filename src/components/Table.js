@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { Link, withRouter } from 'react-router-dom'
 import makeReqToApi from '../lib/makeReqToApi.js'
-// import './Table.css'
+import '../css/Table.css'
 
 const initialState = {
   numOfTickets: 0,
@@ -107,7 +107,6 @@ class Table extends React.Component {
       }
       return <div>Loading...</div>
     }
-
     return (
       <div>
         <h3>Your unsolved tickets</h3>

@@ -25,5 +25,5 @@ This solution provides test on:
 * Whether response of valid tickets is coming back from my Ruby Sinatra backend
 * Whether response of single ticket details is coming back from my Ruby Sinatra backend
 <br /><br />
-To run the test, inside the repo folder, run the test file by typing: `npm test`<br />
+The test file is in `src/test`. To run the test, inside the repo folder, type: `npm test`<br />
 If nothing happens, press `a` to run all tests. Then you should see the result.
