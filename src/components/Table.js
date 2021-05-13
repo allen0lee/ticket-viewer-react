@@ -123,4 +123,4 @@ class Table extends React.Component {
   }
 }
 
-export default withRouter(Table);
+export default withRouter(Table)

@@ -46,4 +46,4 @@ class Details extends React.Component {
   }
 }
 
-export default withRouter(Details);
+export default withRouter(Details)
