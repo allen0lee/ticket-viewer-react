@@ -4,10 +4,10 @@
 This solution is a React frontend visualizes different views (`tickets_list.erb`, `ticket_deatils.erb`, `error.erb`) created by the `ticket_viewer` Ruby Sinatra backend, which is developed using MVC. Repo for the backend is [here](https://github.com/allen0lee/ticket_viewer). <br /><br />
 Technologies used: react, react-router, moment
 
-### 2. How to run this solution
+### 2. How to run this frontend
 1. Install dependencies<br />
 Clone this solution repo to your machine, inside the repo directory, type the following in terminal window: `npm i`<br />
-This will install the dependencies required to run the solution.
+This will install the dependencies required to run the frontend.
 
 2. Turn on the backend<br />
 First you need to have the backend ready (the link for the backend repo is in "Solution summary" and check the `readme` for how to prepare the backend).<br />

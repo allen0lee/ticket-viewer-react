@@ -28,7 +28,7 @@ class Table extends React.Component {
     const url = "http://localhost:9292"
 
     makeReqToApi(url).then(res => {
-      if (!("error" in res)) {
+      if ("tickets" in res) {
         this.setState({ numOfTickets: res.count })
         res.tickets.forEach(ticket => {
           this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
@@ -38,7 +38,7 @@ class Table extends React.Component {
         for (let i = 1; i <= res.pages; i++) {
           this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
         }
-      } else {
+      } else if ("error" in res) {
         this.setState({ errorMessage: res.error })
       }
     }).catch(err => {
@@ -52,7 +52,7 @@ class Table extends React.Component {
     const url = `http://localhost:9292/tickets_list/page/${pageNumber}`
 
     makeReqToApi(url).then(res => {
-      if (!("error" in res)) {
+      if ("tickets" in res) {
         this.setState({ numOfTickets: res.count })
         res.tickets.forEach(ticket => {
           this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
@@ -61,7 +61,7 @@ class Table extends React.Component {
         for (let i = 1; i <= res.pages; i++) {
           this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
         }
-      } else {
+      } else if ("error" in res) {
         this.setState({ errorMessage: res.error })
       }
     }).catch(err => {

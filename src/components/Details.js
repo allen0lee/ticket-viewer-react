@@ -15,9 +15,9 @@ class Details extends React.Component {
     const url = `http://localhost:9292/ticket/${ticketId}`
 
     makeReqToApi(url).then(res => {
-      if (!("error" in res)) {
+      if ("ticket" in res) {
         this.setState({ ticket: res.ticket })
-      } else {
+      } else if ("error" in res) {
         this.setState({ errorMessage: res.error })
       }
     }).catch(err => {
@@ -26,8 +26,8 @@ class Details extends React.Component {
   }
 
   render() {
-    if (!this.state.ticket) {
-      if (this.state.errorMessage) {
+    if (!("ticket" in this.state)) {
+      if ("errorMessage" in this.state) {
         return <div>{this.state.errorMessage}</div>
       }
       return <div>Loading...</div>
