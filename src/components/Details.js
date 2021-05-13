@@ -9,21 +9,20 @@ class Details extends React.Component {
     this.state = {}
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { match, history } = this.props
     const ticketId = match.params.id
     const url = `http://localhost:9292/ticket/${ticketId}`
 
-    try {
-      const res = await makeReqToApi(url)
+    makeReqToApi(url).then(res => {
       if (!("error" in res)) {
         this.setState({ ticket: res.ticket })
       } else {
         this.setState({ errorMessage: res.error })
       }
-    } catch (err) {
+    }).catch(err => {
       history.push('/error') // when req is blocked or network error
-    }
+    })
   }
 
   render() {

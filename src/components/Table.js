@@ -23,12 +23,11 @@ class Table extends React.Component {
     this.setState(initialState)
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { history } = this.props
     const url = "http://localhost:9292"
 
-    try {
-      const res = await makeReqToApi(url)
+    makeReqToApi(url).then(res => {
       if (!("error" in res)) {
         this.setState({ numOfTickets: res.count })
         res.tickets.forEach(ticket => {
@@ -36,42 +35,38 @@ class Table extends React.Component {
         })
         // remove first empty line in table, shift() will mutate
         this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) })
-
         for (let i = 1; i <= res.pages; i++) {
           this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
         }
       } else {
         this.setState({ errorMessage: res.error })
       }
-    } catch (err) {
+    }).catch(err => {
       history.push('/error') // when req is blocked or network error
-    }
+    })
   }
 
-  async switchTablePage(pageNumber) {
+  switchTablePage(pageNumber) {
     this.resetState()
     const { history } = this.props
     const url = `http://localhost:9292/tickets_list/page/${pageNumber}`
 
-    try {
-      const res = await makeReqToApi(url)
+    makeReqToApi(url).then(res => {
       if (!("error" in res)) {
         this.setState({ numOfTickets: res.count })
         res.tickets.forEach(ticket => {
           this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
         })
-
         this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) })
-
         for (let i = 1; i <= res.pages; i++) {
           this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
         }
       } else {
         this.setState({ errorMessage: res.error })
       }
-    } catch (err) {
+    }).catch(err => {
       history.push('/error')
-    }
+    })
   }
 
   renderTableHeader() {
