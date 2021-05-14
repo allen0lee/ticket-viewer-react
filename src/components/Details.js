@@ -28,7 +28,7 @@ class Details extends React.Component {
   render() {
     if (!("ticket" in this.state)) {
       if ("errorMessage" in this.state) {
-        return <div>{this.state.errorMessage}</div>
+        return <div>Error: {this.state.errorMessage}</div>
       }
       return <div>Loading...</div>
     }

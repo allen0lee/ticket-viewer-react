@@ -103,7 +103,7 @@ class Table extends React.Component {
   render() {
     if (this.state.pageNumbers.length === 0) {
       if (this.state.errorMessage !== null) {
-        return <div>{this.state.errorMessage}</div>
+        return <div>Error: {this.state.errorMessage}</div>
       }
       return <div>Loading...</div>
     }
