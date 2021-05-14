@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { Link, withRouter } from 'react-router-dom'
 import makeReqToApi from '../lib/makeReqToApi.js'
+import Error from './Error.js'
 import '../css/Table.css'
 
 const initialState = {
@@ -103,7 +104,7 @@ class Table extends React.Component {
   render() {
     if (this.state.pageNumbers.length === 0) {
       if (this.state.errorMessage !== null) {
-        return <div>Error: {this.state.errorMessage}</div>
+        return <Error data={this.state.errorMessage} />
       }
       return <div>Loading...</div>
     }

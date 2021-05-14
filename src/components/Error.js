@@ -1,3 +1,10 @@
-const Error = () => <div>Oops, something goes wrong!</div>
+const Error = props => {
+  return (
+    <div>
+      <p>Oops, something goes wrong!</p>
+      <p>Error: {props.data}</p>
+    </div>
+  )
+}
 
 export default Error

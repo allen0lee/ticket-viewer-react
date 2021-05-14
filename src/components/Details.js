@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import { Link, withRouter } from 'react-router-dom'
 import makeReqToApi from '../lib/makeReqToApi.js'
+import Error from './Error.js'
 
 class Details extends React.Component {
   constructor() {
@@ -28,7 +29,7 @@ class Details extends React.Component {
   render() {
     if (!("ticket" in this.state)) {
       if ("errorMessage" in this.state) {
-        return <div>Error: {this.state.errorMessage}</div>
+        return <Error data={this.state.errorMessage} />
       }
       return <div>Loading...</div>
     }
