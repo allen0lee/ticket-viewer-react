@@ -27,7 +27,7 @@ class Table extends React.Component {
   connectToApi(requestRoute) {
     const { history } = this.props
     const url = requestRoute
-    
+
     makeReqToApi(url).then(res => {
       if ("tickets" in res) {
         this.setState({ numOfTickets: res.count })
