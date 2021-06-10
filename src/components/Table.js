@@ -24,10 +24,10 @@ class Table extends React.Component {
     this.setState(initialState)
   }
 
-  componentDidMount() {
+  connectToApi(requestRoute) {
     const { history } = this.props
-    const url = "http://localhost:9292"
-
+    const url = requestRoute
+    
     makeReqToApi(url).then(res => {
       if ("tickets" in res) {
         this.setState({ numOfTickets: res.count })
@@ -47,27 +47,15 @@ class Table extends React.Component {
     })
   }
 
+  componentDidMount() {
+    const requestRoute = "http://localhost:9292/tickets_list/page/1"
+    this.connectToApi(requestRoute)
+  }
+
   switchTablePage(pageNumber) {
     this.resetState()
-    const { history } = this.props
-    const url = `http://localhost:9292/tickets_list/page/${pageNumber}`
-
-    makeReqToApi(url).then(res => {
-      if ("tickets" in res) {
-        this.setState({ numOfTickets: res.count })
-        res.tickets.forEach(ticket => {
-          this.setState({ ticketsInfo: [...this.state.ticketsInfo, ticket] })
-        })
-        this.setState({ ticketsInfo: this.state.ticketsInfo.slice(1) })
-        for (let i = 1; i <= res.pages; i++) {
-          this.setState({ pageNumbers: [...this.state.pageNumbers, i] })
-        }
-      } else if ("error" in res) {
-        this.setState({ errorMessage: res.error })
-      }
-    }).catch(err => {
-      history.push('/error')
-    })
+    const requestRoute = `http://localhost:9292/tickets_list/page/${pageNumber}`
+    this.connectToApi(requestRoute)
   }
 
   renderTableHeader() {
